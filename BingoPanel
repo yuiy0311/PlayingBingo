@@ -1,0 +1,53 @@
+package bingo;
+
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.Objects;
+
+
+public class BingoPanel extends JPanel{
+	   private BingoCard card;
+       private Image image;
+	    public BingoPanel(BingoCard card) {
+	    	super();
+	       try {
+	    	   
+	        this.card = card;
+	       // im = ImageIO.read(BingoPanel.class.getResource("/Images/bingo_template.jpg"));
+	       setImage(ImageIO.read(new File("C:\\Users\\mtfoo\\Pictures\\cs\\bingo_blank.jpg")));
+	       //ImageIO.read(imagePanel.class.getResource("/image/marnie.jpg"));
+	       }
+	       catch(IOException e) {
+	    	   e.printStackTrace();
+	       }
+	    }
+
+	    //@Override
+	    public void setImage(Image image) {
+	        this.image = image;
+	        repaint();
+	    }
+	    protected void paintComponent(Graphics g) {
+	        super.paintComponent(g);
+	        g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
+	        drawText(g);
+	    }
+	 
+	    private void drawText(Graphics graphics) {
+	        Font font = new Font("Times New Roman", Font.PLAIN, 40);
+	        graphics.setFont(font);
+	        for (int row = 0; row < 5; row++) {
+	            for (int col = 0; col < 5; col++) {
+	            	if(row == 2 && col ==2) {
+	            		continue;
+	            	}
+	                graphics.drawString(Integer.toString(card.getTile(row, col).getValue()), row * 110 + 110, col * 115 + 227);
+	            }
+	        }
+	       
+	    }
+}
