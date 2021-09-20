@@ -1,0 +1,60 @@
+package bingo;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+public class BingoCard {
+	private BingoTile[][] tiles = new BingoTile[5][5];
+
+    public BingoCard() {
+        generateTiles();
+    }
+
+    private void generateTiles() {
+        for (int row = 0; row < 5; row++) {
+            List<Integer> existingNumbers = new ArrayList<>(5);
+            for (int col = 0; col < 5; col++) {
+                if(row == 2 && col == 2) {
+                    BingoTile tile = new BingoTile(1);//-1? 
+                    tile.setCrossedOff(true);
+                    tiles[2][2] = tile;
+                    continue;
+                }
+                int number;
+                do {
+                    number = getWithinRange(row);
+                } while (existingNumbers.contains(number));
+                existingNumbers.add(number);
+                BingoTile tile = new BingoTile(number);
+                tiles[row][col] = tile;
+            }
+        }
+    }
+
+    private static Random random;
+
+    public static void createRandom(long seed) {
+        random = new Random(seed);
+    }
+
+    private static int getWithinRange(int row) {
+        int number = random.nextInt(15) + 1;
+        return number + (row * 15);
+    }
+
+    public BingoTile getTile(int x, int y) {
+        return tiles[x][y];
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        for(int row = 0; row < 5; row++){
+            for (int col = 0; col < 5; col++) {
+                builder.append(tiles[row][col].getValue()).append('\t');
+            }
+            builder.append('\n');
+        }
+        return builder.toString();
+    }
+}
