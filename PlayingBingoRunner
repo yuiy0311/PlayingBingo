@@ -1,0 +1,77 @@
+package bingo;
+import javax.swing.*;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.regex.Pattern;
+
+public class PlayingBingoRunner {
+
+    private static Pattern pattern = Pattern.compile("-?\\d+(\\.\\d+)?");
+   
+  
+    public static void main(String[] args) {
+    	System.out.println("hello world");
+        JFrame frame = new JFrame("Bingo Frame");
+        JPanel openingPanel = new JPanel();
+        JTextField field = new JTextField(15);
+        JButton button = new JButton("Submit seed");
+        JPanel wrappingPanel = new JPanel();
+        wrappingPanel.add(openingPanel);
+        button.addActionListener(e -> {
+            String string = field.getText();
+            if (string != null && pattern.matcher(string).matches()) {
+                long number = Long.parseLong(string);
+                BingoCard.createRandom(number);
+              //  System.out.println(number);
+                createBingoPanel(frame);
+                openingPanel.removeAll();
+                openingPanel.setBackground(Color.WHITE);
+                openingPanel.setSize(1, 1);
+                JTextField num = new JTextField(15);
+                JButton ball = new JButton("Bingo Number");
+                wrappingPanel.add(ball);
+
+                ArrayList<Integer> calledNums = new ArrayList<Integer>(); 
+
+                ball.addActionListener(k -> {
+  
+                    num.setText(Integer.toString(callBall()));
+                    calledNums.add(Integer.parseInt(num.getText()));
+                });
+                openingPanel.add(num);
+                openingPanel.add(ball);
+               // System.out.println("hi");
+            } 
+                else { field.setText(string + " is not a valid number.");
+            }
+        });
+                
+        openingPanel.add(field);
+        openingPanel.add(button);
+        frame.add(wrappingPanel);
+        
+        frame.setVisible(true);
+        frame.setSize(250, 150);
+        frame.setResizable(false);
+       // callBall();
+    }
+
+    private static void createBingoPanel(JFrame frame) {
+        BingoCard card = new BingoCard();
+       BingoPanel panel = new BingoPanel(card);
+        frame.add(panel);
+        frame.setSize(720, 900);
+        frame.repaint();
+    }
+    
+    public static int callBall() {
+    	int max = 75;
+        int min = 1;
+        int range = max - min + 1;
+        int rand = (int)(Math.random() * range) + min;
+        System.out.println(rand);
+       return rand;
+           
+        }
+ }
+
