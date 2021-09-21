@@ -1,77 +1,76 @@
 package bingo;
+
+//import com.formdev.flatlaf.FlatLightLaf;
+
 import javax.swing.*;
-import java.awt.*;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 import java.util.regex.Pattern;
 
 public class PlayingBingoRunner {
 
-    private static Pattern pattern = Pattern.compile("-?\\d+(\\.\\d+)?");
-   
-  
+    private static final Pattern pattern = Pattern.compile("-?\\d+(\\.\\d+)?");
+    private static BingoCard card;
+
     public static void main(String[] args) {
-    	System.out.println("hello world");
+       // FlatLightLaf.setup();
         JFrame frame = new JFrame("Bingo Frame");
         JPanel openingPanel = new JPanel();
         JTextField field = new JTextField(15);
         JButton button = new JButton("Submit seed");
-        JPanel wrappingPanel = new JPanel();
-        wrappingPanel.add(openingPanel);
         button.addActionListener(e -> {
             String string = field.getText();
             if (string != null && pattern.matcher(string).matches()) {
+                System.out.println("sdf");
+                frame.setVisible(false);
+                JFrame frame1 = new JFrame("Bingo Frame 1");
+                frame1.setVisible(true);
                 long number = Long.parseLong(string);
                 BingoCard.createRandom(number);
-              //  System.out.println(number);
-                createBingoPanel(frame);
-                openingPanel.removeAll();
-                openingPanel.setBackground(Color.WHITE);
-                openingPanel.setSize(1, 1);
+                card = new BingoCard();
+                BingoPanel panel = new BingoPanel(card);
+                frame1.add(panel, 0);
                 JTextField num = new JTextField(15);
                 JButton ball = new JButton("Bingo Number");
-                wrappingPanel.add(ball);
-
-                ArrayList<Integer> calledNums = new ArrayList<Integer>(); 
-
+                panel.add(num);
+                panel.add(ball);
+                ArrayList<Integer> calledNums = new ArrayList<>();
                 ball.addActionListener(k -> {
-  
-                    num.setText(Integer.toString(callBall()));
-                    calledNums.add(Integer.parseInt(num.getText()));
+                    int sdf = card.callBall();
+                    num.setText(num.getText() + sdf + ", ");
+                    calledNums.add(sdf);
+                    card.setTileFor(sdf);
+                    panel.repaint();
                 });
-                openingPanel.add(num);
-                openingPanel.add(ball);
-               // System.out.println("hi");
-            } 
-                else { field.setText(string + " is not a valid number.");
+                frame1.setSize(700, 850);
+            } else {
+                field.setText(string + " is not a valid number.");
             }
         });
-                
         openingPanel.add(field);
         openingPanel.add(button);
-        frame.add(wrappingPanel);
-        
-        frame.setVisible(true);
-        frame.setSize(250, 150);
-        frame.setResizable(false);
-       // callBall();
-    }
+        frame.add(openingPanel);
 
-    private static void createBingoPanel(JFrame frame) {
-        BingoCard card = new BingoCard();
-       BingoPanel panel = new BingoPanel(card);
-        frame.add(panel);
-        frame.setSize(720, 900);
-        frame.repaint();
+        frame.setVisible(true);
+        frame.setSize(250, 100);
     }
     
-    public static int callBall() {
-    	int max = 75;
+    /* public static int callBall(long sd) {
+        int max = 75;
         int min = 1;
         int range = max - min + 1;
-        int rand = (int)(Math.random() * range) + min;
-        System.out.println(rand);
-       return rand;
-           
-        }
- }
+        int rand = (int) (Math.random() * range) + min;
+        return rand;
+       
+    }*/
+    
+  /*  private static Random rand;
+    
+    public static void createRandomBall(long seed) {
+        rand = new Random(seed);
+    }*/
 
+  
+    
+ }
