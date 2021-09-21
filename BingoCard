@@ -45,6 +45,29 @@ public class BingoCard {
     public BingoTile getTile(int x, int y) {
         return tiles[x][y];
     }
+    
+    public void setTileFor(int number) {
+        int x = number / 15;
+        for (int i = 0; i < 5; i++) {
+            if (tiles[x][i].getValue() == number) {
+                tiles[x][i].setCrossedOff(true);
+                break;
+            }
+        }
+    }
+    
+    public int callBall() {
+    	List<Integer> existNum = new ArrayList<>(5);
+        int num;
+        
+        do {
+        	num = random.nextInt(75) + 1;
+        } while(existNum.contains(Integer.valueOf(num)));
+        existNum.add(Integer.valueOf(num));
+        	return num;
+    }
+    
+
 
     @Override
     public String toString() {
